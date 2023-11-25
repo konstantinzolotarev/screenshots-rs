@@ -1,10 +1,11 @@
-use crate::image_utils::remove_extra_data;
+use crate::image_utils::{bgra_to_bgr_buff, remove_extra_data};
 use anyhow::{anyhow, Result};
 use core_graphics::{
     display::{kCGNullWindowID, kCGWindowImageDefault, kCGWindowListOptionOnScreenOnly, CGDisplay},
     geometry::{CGPoint, CGRect, CGSize},
 };
 use display_info::DisplayInfo;
+use image::RgbaImage;
 
 fn capture(display_info: &DisplayInfo, cg_rect: CGRect) -> Result<Vec<u8>> {
     let cg_image = CGDisplay::screenshot(
@@ -17,14 +18,13 @@ fn capture(display_info: &DisplayInfo, cg_rect: CGRect) -> Result<Vec<u8>> {
 
     let width = cg_image.width();
     let height = cg_image.height();
-
-    Ok(remove_extra_data(
+    let clean_buf = remove_extra_data(
         width,
         cg_image.bytes_per_row(),
         Vec::from(cg_image.data().bytes()),
-    ))
+    );
 
-    // bgra_to_rgba_image(width as u32, height as u32, clean_buf)
+    Ok(bgra_to_bgr_buff(width as u32, height as u32, clean_buf))
 }
 
 pub fn capture_screen(display_info: &DisplayInfo) -> Result<Vec<u8>> {

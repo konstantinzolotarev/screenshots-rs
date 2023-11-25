@@ -19,6 +19,7 @@ pub fn bgra_to_rgba_image(width: u32, height: u32, buf: Vec<u8>) -> Result<RgbaI
 
 #[cfg(any(target_os = "windows", target_os = "macos", test))]
 pub fn bgra_to_bgr_buff(width: u32, height: u32, buf: Vec<u8>) -> Vec<u8> {
+    dbg!(width, height);
     // convert to rgba
     buf.chunks_exact(4)
         .take((width * height) as usize)

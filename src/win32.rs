@@ -98,7 +98,7 @@ extern "system" fn monitor_enum_proc(
     }
 }
 
-fn capture(display_id: u32, x: i32, y: i32, width: i32, height: i32) -> Result<RgbaImage> {
+fn capture(display_id: u32, x: i32, y: i32, width: i32, height: i32) -> Result<Vec<u8>> {
     let monitor_info_exw = get_monitor_info_exw_from_id(display_id)?;
 
     let sz_device = monitor_info_exw.szDevice;
@@ -207,14 +207,10 @@ fn capture(display_id: u32, x: i32, y: i32, width: i32, height: i32) -> Result<R
 
     chunks.reverse();
 
-    bgra_to_rgba_image(
-        bitmap.bmWidth as u32,
-        bitmap.bmHeight as u32,
-        chunks.concat(),
-    )
+    Ok(chunks.concat())
 }
 
-pub fn capture_screen(display_info: &DisplayInfo) -> Result<RgbaImage> {
+pub fn capture_screen(display_info: &DisplayInfo) -> Result<Vec<u8>> {
     let width = ((display_info.width as f32) * display_info.scale_factor) as i32;
     let height = ((display_info.height as f32) * display_info.scale_factor) as i32;
 
@@ -227,7 +223,7 @@ pub fn capture_screen_area(
     y: i32,
     width: u32,
     height: u32,
-) -> Result<RgbaImage> {
+) -> Result<Vec<u8>> {
     let area_x = ((x as f32) * display_info.scale_factor) as i32;
     let area_y = ((y as f32) * display_info.scale_factor) as i32;
     let area_width = ((width as f32) * display_info.scale_factor) as i32;

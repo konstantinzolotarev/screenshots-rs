@@ -2,7 +2,6 @@ mod image_utils;
 
 use anyhow::{anyhow, Result};
 use display_info::DisplayInfo;
-use image::RgbaImage;
 
 pub use display_info;
 pub use image;
@@ -51,12 +50,12 @@ impl Screen {
     }
 
     /// Capture a screenshot of the screen.
-    pub fn capture(&self) -> Result<RgbaImage> {
+    pub fn capture(&self) -> Result<Vec<u8>> {
         capture_screen(&self.display_info)
     }
 
     /// Captures a screenshot of the designated area of the screen.
-    pub fn capture_area(&self, x: i32, y: i32, width: u32, height: u32) -> Result<RgbaImage> {
+    pub fn capture_area(&self, x: i32, y: i32, width: u32, height: u32) -> Result<Vec<u8>> {
         let display_info = self.display_info;
         let screen_x2 = display_info.x + display_info.width as i32;
         let screen_y2 = display_info.y + display_info.height as i32;

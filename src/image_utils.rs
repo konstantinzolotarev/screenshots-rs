@@ -19,15 +19,15 @@ pub fn bgra_to_rgba_image(width: u32, height: u32, buf: Vec<u8>) -> Result<RgbaI
 }
 
 #[cfg(any(target_os = "windows", target_os = "macos", test))]
-pub fn bgra_to_bgr_raw_image(width: u32, height: u32, buf: Vec<u8>) -> RawImage {
+pub fn to_raw_image(width: u32, height: u32, buf: Vec<u8>) -> RawImage {
     // convert to rgba
-    let data = buf
-        .chunks_exact(4)
-        .take((width * height) as usize)
-        .flat_map(|bgra| [bgra[0], bgra[1], bgra[2]])
-        .collect();
+    // let data = buf
+    //     .chunks_exact(4)
+    //     .take((width * height) as usize)
+    //     .flat_map(|bgra| [bgra[0], bgra[1], bgra[2]])
+    //     .collect();
 
-    RawImage::new(width, height, data)
+    RawImage::new(width, height, buf)
 }
 
 /// Some platforms e.g. MacOS can have extra bytes at the end of each row.

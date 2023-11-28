@@ -1,5 +1,5 @@
 use crate::{
-    image_utils::{bgra_to_bgr_raw_image, remove_extra_data},
+    image_utils::{remove_extra_data, to_raw_image},
     RawImage,
 };
 use anyhow::{anyhow, Result};
@@ -27,11 +27,7 @@ fn capture(display_info: &DisplayInfo, cg_rect: CGRect) -> Result<RawImage> {
             Vec::from(cg_image.data().bytes()),
         );
 
-    Ok(bgra_to_bgr_raw_image(
-        width as u32,
-        height as u32,
-        clean_buf,
-    ))
+    Ok(to_raw_image(width as u32, height as u32, clean_buf))
 }
 
 pub fn capture_screen(display_info: &DisplayInfo) -> Result<RawImage> {

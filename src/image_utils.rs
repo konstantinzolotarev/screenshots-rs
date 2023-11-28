@@ -1,3 +1,4 @@
+use crate::RawImage;
 use anyhow::{anyhow, Result};
 use image::RgbaImage;
 
@@ -18,13 +19,15 @@ pub fn bgra_to_rgba_image(width: u32, height: u32, buf: Vec<u8>) -> Result<RgbaI
 }
 
 #[cfg(any(target_os = "windows", target_os = "macos", test))]
-pub fn bgra_to_bgr_buff(width: u32, height: u32, buf: Vec<u8>) -> Vec<u8> {
-    dbg!(width, height);
+pub fn bgra_to_bgr_raw_image(width: u32, height: u32, buf: Vec<u8>) -> RawImage {
     // convert to rgba
-    buf.chunks_exact(4)
+    let data = buf
+        .chunks_exact(4)
         .take((width * height) as usize)
         .flat_map(|bgra| [bgra[0], bgra[1], bgra[2]])
-        .collect()
+        .collect();
+
+    RawImage::new(width, height, data)
 }
 
 /// Some platforms e.g. MacOS can have extra bytes at the end of each row.
@@ -69,13 +72,14 @@ mod tests {
 
     #[test]
     fn extra_data() {
-        let clean = remove_extra_data(
-            2,
-            9,
-            vec![
-                1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 13, 14, 15, 16, 17, 18, 19,
-            ],
-        );
+        let clean =
+            remove_extra_data(
+                2,
+                9,
+                vec![
+                    1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 13, 14, 15, 16, 17, 18, 19,
+                ],
+            );
         assert_eq!(
             clean,
             vec![1, 2, 3, 4, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18]

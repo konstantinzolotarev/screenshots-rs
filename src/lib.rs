@@ -50,12 +50,12 @@ impl Screen {
     }
 
     /// Capture a screenshot of the screen.
-    pub fn capture(&self) -> Result<Vec<u8>> {
+    pub fn capture(&self) -> Result<RawImage> {
         capture_screen(&self.display_info)
     }
 
     /// Captures a screenshot of the designated area of the screen.
-    pub fn capture_area(&self, x: i32, y: i32, width: u32, height: u32) -> Result<Vec<u8>> {
+    pub fn capture_area(&self, x: i32, y: i32, width: u32, height: u32) -> Result<RawImage> {
         let display_info = self.display_info;
         let screen_x2 = display_info.x + display_info.width as i32;
         let screen_y2 = display_info.y + display_info.height as i32;
@@ -97,5 +97,21 @@ impl Screen {
             (x2 - x1) as u32,
             (y2 - y1) as u32,
         )
+    }
+}
+
+pub struct RawImage {
+    pub width: u32,
+    pub height: u32,
+    pub data: Vec<u8>,
+}
+
+impl RawImage {
+    pub fn new(width: u32, height: u32, data: Vec<u8>) -> Self {
+        RawImage {
+            width,
+            height,
+            data,
+        }
     }
 }

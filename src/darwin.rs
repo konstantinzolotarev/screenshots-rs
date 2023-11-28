@@ -10,7 +10,6 @@ use core_graphics::{
 use display_info::DisplayInfo;
 
 fn capture(display_info: &DisplayInfo, cg_rect: CGRect) -> Result<RawImage> {
-    dbg!(display_info);
     let cg_image = CGDisplay::screenshot(
         cg_rect,
         kCGWindowListOptionOnScreenOnly,

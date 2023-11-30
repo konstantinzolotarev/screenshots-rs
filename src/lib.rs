@@ -100,6 +100,7 @@ impl Screen {
     }
 }
 
+#[derive(Debug, Clone)]
 pub struct RawImage {
     pub width: u32,
     pub height: u32,
